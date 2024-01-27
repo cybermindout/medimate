@@ -9,6 +9,7 @@ import 'package:medimate/screens/Admin/model/location_model.dart';
 import 'package:medimate/screens/Admin/model/special_model.dart';
 import 'package:medimate/screens/Guest/guest_screen/splash_screen.dart';
 import 'package:medimate/screens/Guest/model/user_model.dart';
+import 'package:medimate/screens/User/model/wishlist_model.dart';
 import 'package:medimate/screens/User/user_screen/home_screen.dart';
 
 const SAVE_KEY_NAME = "UserLoggedIn";
@@ -21,6 +22,7 @@ Future<void> main() async {
   Hive.openBox<LocationModel>('loc_db');
   Hive.openBox<HospitalModel>('hos_db');
   Hive.openBox<DoctorModel>('doctor_db');
+  Hive.openBox<WishlistModel>('wish_db');
 
   if (!Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
     Hive.registerAdapter(UserModelAdapter());
@@ -36,6 +38,9 @@ Future<void> main() async {
   }
   if (!Hive.isAdapterRegistered(DoctorModelAdapter().typeId)) {
     Hive.registerAdapter(DoctorModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(WishlistModelAdapter().typeId)) {
+    Hive.registerAdapter(WishlistModelAdapter());
   }
   runApp(const MyApp());
 }

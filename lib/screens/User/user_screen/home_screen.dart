@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:medimate/screens/Guest/guest_screen/logout_screen.dart';
 import 'package:medimate/screens/Guest/model/user_model.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
+import 'package:medimate/screens/User/user_screen/appointments.dart';
 import 'package:medimate/screens/User/user_screen/doctor_screen.dart';
 import 'package:medimate/screens/User/user_screen/hospital_screen.dart';
 import 'package:medimate/screens/User/user_screen/location_screen.dart';

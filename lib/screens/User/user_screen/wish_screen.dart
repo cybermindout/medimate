@@ -1,72 +1,52 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:medimate/screens/Admin/model/doctor_model.dart';
 
-class WishlistPage extends StatefulWidget {
-  @override
-  _WishlistPageState createState() => _WishlistPageState();
-}
+import 'package:medimate/screens/User/model/wishlist_model.dart';
+import 'package:medimate/screens/User/user_screen/doctor_details.dart';
 
-class _WishlistPageState extends State<WishlistPage> {
-  late Box<DoctorModel> wishlistBox;
-
-  @override
-  void initState() {
-    super.initState();
-    openWishlistBox();
-  }
-
-  Future<void> openWishlistBox() async {
-    wishlistBox = await Hive.openBox<DoctorModel>('wishlist');
-    setState(() {});
-  }
-
+class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Wishlist'),
-      ),
-      body: _buildWishlist(),
-    );
-  }
+        appBar: AppBar(
+          title: Text('Wishlist'),
+        ),
+        body: FutureBuilder(
+          future: Hive.openBox<WishlistModel>('wishlist'),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              var wishlistBox = Hive.box<WishlistModel>('wishlist');
+              List<int> wishlistDoctorIds =
+                  wishlistBox.keys.cast<int>().toList();
 
-  Widget _buildWishlist() {
-    if (wishlistBox.isEmpty) {
-      return Center(
-        child: Text('Your wishlist is empty.'),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: wishlistBox.length,
-      itemBuilder: (context, index) {
-        DoctorModel doctor = wishlistBox.getAt(index)!;
-        return _buildDoctorTile(doctor);
-      },
-    );
-  }
-
-  Widget _buildDoctorTile(DoctorModel doctor) {
-    return ListTile(
-      title: Text(doctor.name),
-      subtitle: Text(doctor.specialization),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () {
-          removeFromWishlist(doctor.id!);
-        },
-      ),
-      onTap: () {
-        // Handle tapping on a doctor in the wishlist
-      },
-    );
-  }
-
-  void removeFromWishlist(int doctorId) {
-    wishlistBox.delete(doctorId);
-    setState(() {});
+              return ListView.builder(
+                itemCount: wishlistDoctorIds.length,
+                itemBuilder: (context, index) {
+                  int doctorId = wishlistDoctorIds[index];
+                  var wishlistItem = wishlistBox.get(doctorId);
+                  return ListTile(
+                    title: Text(wishlistItem?.doctorDetails?.name ?? ''),
+                    subtitle:
+                        Text(wishlistItem?.doctorDetails?.specialization ?? ''),
+                    onTap: () {
+                      // Navigate to DoctorDetailPage when tapping on a doctor in the wishlist
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DoctorDetailPage(
+                              doctor: wishlistItem!.doctorDetails!),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ));
   }
 }

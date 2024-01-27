@@ -26,7 +26,6 @@ Future<void> addDoctor(DoctorModel value) async {
         photo: data.photo,
         id: id,
       ));
-  //print(doctorDB.values);
 }
 
 //to get doctors

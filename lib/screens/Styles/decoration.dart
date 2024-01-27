@@ -78,6 +78,9 @@ TextStyle doctorListTitle() =>
 TextStyle doctorListSubtitle() =>
     TextStyle(fontWeight: FontWeight.w500, fontSize: 15);
 
+TextStyle doctorDetailSubtitle() =>
+    TextStyle(fontWeight: FontWeight.w500, fontSize: 20);
+
 //Statistics card counts
 TextStyle statisticsCardCount() => TextStyle(
     fontSize: 35,

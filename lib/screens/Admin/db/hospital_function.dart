@@ -74,4 +74,5 @@ Future<void> editHospital(int id, String updatedHospitalName,
     await hospitalBox.put(id, existingHospital);
     getHospitals();
   }
+  
 }
