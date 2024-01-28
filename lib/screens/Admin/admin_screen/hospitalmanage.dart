@@ -11,7 +11,6 @@ import 'package:medimate/screens/Admin/model/hospital_model.dart';
 import 'package:medimate/screens/Admin/model/location_model.dart';
 import 'package:medimate/screens/Admin/model/special_model.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
-import 'package:medimate/screens/User/user_screen/specialization_screen.dart';
 
 class HospitalManagePage extends StatefulWidget {
   const HospitalManagePage({Key? key});
@@ -27,7 +26,6 @@ class _HospitalPageState extends State<HospitalManagePage> {
   File? _selectedImage;
 
   late Box<LocationModel> locBox;
-
   late Box<SpecialModel> specBox;
 
   List<LocationModel> location = [];
@@ -64,7 +62,13 @@ class _HospitalPageState extends State<HospitalManagePage> {
       return;
     } else {
       final hospital = HospitalModel(
-          hos: hos, photo: imagepath, id: -1, loc: '', specialization: '');
+        hos: hos,
+        photo: imagepath,
+        id: -1,
+        loc: selectedLocationName ?? '',
+        specialization:
+            selectedSpecializations.join(','), // Join specializations
+      );
       addHospital(hospital);
     }
   }
@@ -325,124 +329,146 @@ class _HospitalPageState extends State<HospitalManagePage> {
       String? selectedLocationName) {
     _editController.text = hospital;
     _selectedImage = File(photo);
-    setState(() {});
+
+    List<String> initialSpecializations = hospitalListNotifier.value
+        .firstWhere((element) => element.id == id)
+        .specialization
+        .split(',');
+
+    List<String> selectedSpecializations = List.from(initialSpecializations);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // edit photo
-                Row(
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: const Color.fromARGB(255, 18, 18, 18),
+                    // edit photo
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: const Color.fromARGB(255, 18, 18, 18),
+                              ),
+                            ),
+                            child: _selectedImage != null
+                                ? Image.file(
+                                    _selectedImage!,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Center(child: Icon(Icons.add_a_photo)),
                           ),
                         ),
-                        child: _selectedImage != null
-                            ? Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.fill,
-                              )
-                            : Center(child: Icon(Icons.add_a_photo)),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                _pickImage().then((_) {
+                                  setState(() {}); // Refresh the UI
+                                });
+                              },
+                              icon: Icon(Icons.photo_library_outlined),
+                              tooltip: "select from gallery",
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20),
+
+                    // special txt
+                    TextFormField(
+                      controller: _editController,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: "Edit Hospital",
                       ),
                     ),
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _pickImage();
-                          },
-                          icon: Icon(Icons.photo_library_outlined),
-                          tooltip: "select from gallery",
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: 20),
+                    SizedBox(height: 25),
 
-                // special txt
-                TextFormField(
-                  controller: _editController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: "Edit Hospital",
-                  ),
-                ),
-                SizedBox(height: 25),
-
-                DropdownButtonFormField<String>(
-                  validator: (value) {
-                    if (value == null) {
-                      return "select location";
-                    }
-                    return null;
-                  },
-                  value: selectedLocationName,
-                  items: location.map((LocationModel location) {
-                    return DropdownMenuItem<String>(
-                      value: location.loc,
-                      child: Text(location.loc),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLocationName = newValue;
-                    });
-                  },
-                  decoration: InputDecoration(hintText: "Select Location"),
-                ),
-
-                // specialization checkboxes
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: specialList.map((spec) {
-                    return CheckboxListTile(
-                      title: Text(spec.spec),
-                      value: selectedSpecializations.contains(spec.spec),
-                      onChanged: (bool? value) {
+                    DropdownButtonFormField<String>(
+                      validator: (value) {
+                        if (value == null) {
+                          return "select location";
+                        }
+                        return null;
+                      },
+                      value: selectedLocationName,
+                      items: location.map((LocationModel location) {
+                        return DropdownMenuItem<String>(
+                          value: location.loc,
+                          child: Text(location.loc),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
                         setState(() {
-                          if (value != null) {
-                            if (value) {
-                              selectedSpecializations.add(spec.spec);
-                            } else {
-                              selectedSpecializations.remove(spec.spec);
-                            }
-                          }
+                          selectedLocationName = newValue;
                         });
                       },
-                    );
-                  }).toList(),
-                ),
+                      decoration: InputDecoration(hintText: "Select Location"),
+                    ),
 
-                SizedBox(height: 25),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Colors.green[400])),
-                  onPressed: () {
-                    editHospital(id, _editController.text, _selectedImage!.path,
-                        selectedLocationName.toString());
-                    _hospitalController.clear();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Save"),
+                    // specialization checkboxes
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: specialList.map((spec) {
+                        return CheckboxListTile(
+                          title: Text(spec.spec),
+                          value: selectedSpecializations.contains(spec.spec),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              if (value != null) {
+                                if (value) {
+                                  selectedSpecializations.add(spec.spec);
+                                } else {
+                                  selectedSpecializations.remove(spec.spec);
+                                }
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+
+                    SizedBox(height: 25),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.green[400]),
+                      ),
+                      onPressed: () {
+                        String joinedSpecializations =
+                            selectedSpecializations.join(',');
+
+                        editHospital(
+                          id,
+                          _editController.text,
+                          _selectedImage!.path,
+                          selectedLocationName.toString(),
+                          joinedSpecializations,
+                        );
+                        _hospitalController.clear();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Save"),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

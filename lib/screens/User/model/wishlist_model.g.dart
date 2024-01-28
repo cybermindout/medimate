@@ -8,7 +8,7 @@ part of 'wishlist_model.dart';
 
 class WishlistModelAdapter extends TypeAdapter<WishlistModel> {
   @override
-  final int typeId = 10;
+  final int typeId = 6;
 
   @override
   WishlistModel read(BinaryReader reader) {

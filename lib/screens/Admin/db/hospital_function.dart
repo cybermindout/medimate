@@ -58,7 +58,7 @@ Future<int> hospitalStats() async {
 }
 
 Future<void> editHospital(int id, String updatedHospitalName,
-    String updatedPhoto, String updatedLoc) async {
+    String updatedPhoto, String updatedLoc, String joinedSpecializations) async {
   final hospitalBox = await Hive.openBox<HospitalModel>('hospital_db');
   final existingHospital =
       hospitalBox.values.firstWhere((hospital) => hospital.id == id);

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:medimate/screens/Admin/admin_screen/appopintments.dart';
 import 'package:medimate/screens/Admin/admin_screen/dashboard/dashboad_widgets.dart';
 import 'package:medimate/screens/Admin/admin_screen/doctor/doctor_list.dart';
 import 'package:medimate/screens/Admin/admin_screen/doctor/doctormanage.dart';
@@ -157,7 +158,14 @@ class DashboardScreen extends StatelessWidget {
                                 CustomDashItem(
                                   icon: Icons.bookmark_add,
                                   label: 'Appointments',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AppointmentViewPage(),
+                                        ));
+                                  },
                                 ),
                               ],
                             ),

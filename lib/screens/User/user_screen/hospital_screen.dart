@@ -101,14 +101,30 @@ class _HospitalPageState extends State<HospitalPage> {
                                           CircleAvatar(
                                             radius: 50,
                                             backgroundColor: Colors.transparent,
-                                            // Since there is no photo in HospitalModel,
-                                            // CircleAvatar is commented out for now.
                                             backgroundImage: FileImage(
                                               File(data.photo),
                                             ),
                                           ),
                                           Text(
                                             data.hos,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color.fromARGB(
+                                                  255, 0, 0, 0),
+                                            ),
+                                          ),
+                                          Text(
+                                            data.loc,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color.fromARGB(
+                                                  255, 0, 0, 0),
+                                            ),
+                                          ),
+                                          Text(
+                                            data.specialization,
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w500,

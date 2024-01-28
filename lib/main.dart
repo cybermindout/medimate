@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:medimate/screens/Admin/admin_screen/dashboard/dashboard_screen.dart';
+import 'package:medimate/screens/Admin/model/appoinment_model.dart';
 import 'package:medimate/screens/Admin/model/doctor_model.dart';
 import 'package:medimate/screens/Admin/model/hospital_model.dart';
 import 'package:medimate/screens/Admin/model/location_model.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   Hive.openBox<HospitalModel>('hos_db');
   Hive.openBox<DoctorModel>('doctor_db');
   Hive.openBox<WishlistModel>('wish_db');
+  Hive.openBox<AppointmentModel>('appo_db');
 
   if (!Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
     Hive.registerAdapter(UserModelAdapter());
@@ -41,6 +43,9 @@ Future<void> main() async {
   }
   if (!Hive.isAdapterRegistered(WishlistModelAdapter().typeId)) {
     Hive.registerAdapter(WishlistModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(AppointmentModelAdapter().typeId)) {
+    Hive.registerAdapter(AppointmentModelAdapter());
   }
   runApp(const MyApp());
 }
