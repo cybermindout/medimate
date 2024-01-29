@@ -8,11 +8,10 @@ import 'package:medimate/screens/Admin/model/doctor_model.dart';
 import 'package:medimate/screens/Admin/model/hospital_model.dart';
 import 'package:medimate/screens/Admin/model/location_model.dart';
 import 'package:medimate/screens/Admin/model/special_model.dart';
-import 'package:medimate/screens/Guest/model/user_model.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
-import 'package:medimate/screens/User/db/filter_function.dart';
+import 'package:medimate/screens/User/db/appointment_functions.dart';
 import 'package:medimate/screens/User/user_screen/home_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:medimate/screens/User/db/filter_function.dart';
 
 class BookAppointment extends StatefulWidget {
   const BookAppointment({Key? key}) : super(key: key);
@@ -22,27 +21,6 @@ class BookAppointment extends StatefulWidget {
 }
 
 class _BookAppointmentState extends State<BookAppointment> {
-  String? selectedDescription;
-  final List<String> description = ['Mr.', 'Mrs.', 'Ms', 'Baby', 'Baby Of'];
-  String? selectedGender;
-  final List<String> genderOptions = ['Male', 'Female', 'Others'];
-
-  String? selectedLocation;
-  List<LocationModel> locationList = [];
-
-  String? selectedHospital;
-  List<HospitalModel> hospitalList = [];
-
-  String? selectedSpecialization;
-  List<SpecialModel> specializationList = [];
-
-  String? selectedDoctor;
-  List<DoctorModel> doctorList = [];
-
-  List<HospitalModel> filteredHospitals = [];
-  List<SpecialModel> filteredSpecializations = [];
-  List<DoctorModel> filteredDoctors = [];
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
@@ -52,11 +30,6 @@ class _BookAppointmentState extends State<BookAppointment> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
-  String userEmail = '';
-  UserModel? currentUser;
-
-  int age = 0;
-
   @override
   void initState() {
     super.initState();
@@ -65,55 +38,6 @@ class _BookAppointmentState extends State<BookAppointment> {
     getHospitals();
     getSpecializations();
     getDoctors();
-  }
-
-  Future<void> getUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    userEmail = prefs.getString('currentUser') ?? '';
-    final userBox = await Hive.openBox<UserModel>('user_db');
-    currentUser = userBox.values.firstWhere(
-      (user) => user.email == userEmail,
-    );
-    calculateAge();
-    setState(() {});
-  }
-
-  void calculateAge() {
-    if (currentUser != null) {
-      String dobString = currentUser!.dob;
-      DateTime dob = DateTime.parse(dobString);
-      DateTime currentDate = DateTime.now();
-      Duration difference = currentDate.difference(dob);
-      age = (difference.inDays / 365).floor();
-    }
-  }
-
-  Future<void> getLocations() async {
-    final locationBox = await Hive.openBox<LocationModel>('loc_db');
-    setState(() {
-      locationList = locationBox.values.toList();
-    });
-  }
-
-  Future<void> getHospitals() async {
-    final hospitalBox = await Hive.openBox<HospitalModel>('hospital_db');
-    setState(() {
-      hospitalList = hospitalBox.values.toList();
-    });
-  }
-
-  Future<void> getSpecializations() async {
-    final specialBox = await Hive.openBox<SpecialModel>('spec_db');
-    setState(() {
-      specializationList = specialBox.values.toList();
-    });
-  }
-
-  Future<void> getDoctors() async {
-    final doctorBox = await Hive.openBox<DoctorModel>('doctor_db');
-    setState(() {
-      doctorList = doctorBox.values.toList();
-    });
   }
 
   void onLocationChanged(String? newValue) {
@@ -127,18 +51,8 @@ class _BookAppointmentState extends State<BookAppointment> {
   void onHospitalChanged(String? newValue) {
     setState(() {
       selectedHospital = newValue;
-      filteredDoctors =
-          FilterFunctions.filterDoctorsByHospitalAndSpecialization(
-              doctorList, selectedHospital!, selectedSpecialization!);
-    });
-  }
-
-  void onSpecializationChanged(String? newValue) {
-    setState(() {
-      selectedSpecialization = newValue;
-      filteredDoctors =
-          FilterFunctions.filterDoctorsByHospitalAndSpecialization(
-              doctorList, selectedHospital!, selectedSpecialization!);
+      filteredDoctors = FilterFunctions()
+          .filterDoctorsByHospital(doctorList, selectedHospital!);
     });
   }
 
@@ -252,11 +166,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                             hintText: "Date Of Birth"),
                         readOnly: true,
                         onTap: () {
-                          _selectDate(context);
+                          selectDate(context);
                         },
-                      ),
-                      SizedBox(
-                        height: 20,
                       ),
                       SizedBox(
                         height: 20,
@@ -325,7 +236,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                           hintText: "Booking Date",
                         ),
                         onTap: () {
-                          _selectBookDate(context);
+                          selectBookDate(context);
                         },
                       ),
                       SizedBox(
@@ -349,7 +260,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                         ),
                         readOnly: true,
                         onTap: () {
-                          _selectTime(context);
+                          selectTime(context);
                         },
                       ),
                       SizedBox(
@@ -412,33 +323,6 @@ class _BookAppointmentState extends State<BookAppointment> {
                       DropdownButtonFormField<String>(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Select a specialization";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: selectedSpecialization,
-                        onChanged: onSpecializationChanged,
-                        items: filteredSpecializations.map((SpecialModel spec) {
-                          return DropdownMenuItem<String>(
-                            value: spec.spec,
-                            child: Text(spec.spec),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.medical_services,
-                            color: Colors.grey,
-                          ),
-                          hintText: "Select Specialization",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
                             return "Select a doctor";
                           }
                           return null;
@@ -448,7 +332,8 @@ class _BookAppointmentState extends State<BookAppointment> {
                         items: filteredDoctors.map((DoctorModel doctor) {
                           return DropdownMenuItem<String>(
                             value: doctor.name,
-                            child: Text(doctor.name),
+                            child: Text(
+                                "${doctor.name} (${doctor.specialization})"),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
@@ -484,108 +369,34 @@ class _BookAppointmentState extends State<BookAppointment> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime selectedDate = DateTime.now(); // Initialize with the current date.
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900), // Start date for selection
-      lastDate: DateTime(2025), // End date for selection
-    );
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _dobController.text = selectedDate.toLocal().toString().split(' ')[0];
-      });
-    }
+  Future<void> getSpecializations() async {
+    final specialBox = await Hive.openBox<SpecialModel>('spec_db');
+    setState(() {
+      specializationList = specialBox.values.toList();
+    });
   }
 
-  Future<void> _selectBookDate(BuildContext context) async {
-    DateTime selectedBookDate =
-        DateTime.now(); // Initialize with the current date.
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2024),
-      firstDate: DateTime(1900), // Start date for selection
-      lastDate: DateTime(2025), // End date for selection
-    );
-
-    if (picked != null && picked != selectedBookDate) {
-      setState(() {
-        selectedBookDate = picked;
-        _dateController.text =
-            selectedBookDate.toLocal().toString().split(' ')[0];
-      });
-    }
+  Future<void> getDoctors() async {
+    final doctorBox = await Hive.openBox<DoctorModel>('doctor_db');
+    setState(() {
+      doctorList = doctorBox.values.toList();
+    });
   }
 
-//to validate full name
-  String? validateFullName(String? value) {
-    final trimmedValue = value?.trim();
-
-    if (trimmedValue == null || trimmedValue.isEmpty) {
-      return 'Full Name is required';
-    }
-
-    final RegExp nameRegExp = RegExp(r'^[a-zA-Z ]+$');
-
-    if (!nameRegExp.hasMatch(trimmedValue)) {
-      return 'Full Name can only contain letters and spaces';
-    }
-
-    return null;
+  Future<void> getLocations() async {
+    final locationBox = await Hive.openBox<LocationModel>('loc_db');
+    setState(() {
+      locationList = locationBox.values.toList();
+    });
   }
 
-//to validate email
-  String? validateEmail(String? value) {
-    final trimmedValue = value?.trim();
-
-    if (trimmedValue == null || trimmedValue.isEmpty) {
-      return 'Email is required';
-    }
-
-    final RegExp emailRegExp = RegExp(
-      r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
-    );
-
-    if (!emailRegExp.hasMatch(trimmedValue)) {
-      return 'Invalid email address';
-    }
-
-    return null;
+  Future<void> getHospitals() async {
+    final hospitalBox = await Hive.openBox<HospitalModel>('hospital_db');
+    setState(() {
+      hospitalList = hospitalBox.values.toList();
+    });
   }
 
-//to validate number
-  String? validateNumber(String? value) {
-    final trimmedValue = value?.trim();
-
-    if (trimmedValue == null || trimmedValue.isEmpty) {
-      return 'Mobile number is required';
-    }
-
-    final RegExp numberRegExp = RegExp(r'^[0-9]{10}$');
-
-    if (!numberRegExp.hasMatch(trimmedValue)) {
-      return 'Mobile number must be exactly 10 digits and contain only numbers';
-    }
-
-    return null;
-  }
-
-//to validate cannot be empty
-  String? validateEmpty(String? value) {
-    final trimmedValue = value?.trim();
-
-    if (trimmedValue == null || trimmedValue.isEmpty) {
-      return 'Cannot be empty';
-    }
-    return null;
-  }
-
-//submit form
   Future<void> addAppointmentButton() async {
     final String description = selectedDescription ?? "";
     final String name = _nameController.text.trim();
@@ -629,35 +440,45 @@ class _BookAppointmentState extends State<BookAppointment> {
     }
   }
 
-//code for success snackbar
-  void showSnackBarSuccess(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(message),
-        duration: Duration(seconds: 3),
-      ),
+  Future<void> selectDate(BuildContext context) async {
+    DateTime selectedDate = DateTime.now(); // Initialize with the current date.
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900), // Start date for selection
+      lastDate: DateTime(2025), // End date for selection
     );
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ),
-        (route) => false);
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _dobController.text = selectedDate.toLocal().toString().split(' ')[0];
+      });
+    }
   }
 
-//code for failed snackbar
-  void showSnackBarFailed(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.red[400],
-        content: Text(message),
-        duration: Duration(seconds: 3),
-      ),
+  Future<void> selectBookDate(BuildContext context) async {
+    DateTime selectedBookDate =
+        DateTime.now(); // Initialize with the current date.
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2024),
+      firstDate: DateTime(1900), // Start date for selection
+      lastDate: DateTime(2025), // End date for selection
     );
+
+    if (picked != null && picked != selectedBookDate) {
+      setState(() {
+        selectedBookDate = picked;
+        _dateController.text =
+            selectedBookDate.toLocal().toString().split(' ')[0];
+      });
+    }
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context) async {
     TimeOfDay selectedTime =
         TimeOfDay.now(); // Initialize with the current time.
 

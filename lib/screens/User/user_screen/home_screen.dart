@@ -10,7 +10,6 @@ import 'package:medimate/screens/User/user_screen/doctor_screen.dart';
 import 'package:medimate/screens/User/user_screen/hospital_screen.dart';
 import 'package:medimate/screens/User/user_screen/location_screen.dart';
 import 'package:medimate/screens/User/user_screen/profile_screen.dart';
-import 'package:medimate/screens/User/user_screen/search_filter.dart';
 import 'package:medimate/screens/User/user_screen/specialization_screen.dart';
 import 'package:medimate/screens/User/user_screen/wish_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Positioned(
-                            top: 30,
-                            left: 10,
+                            top: 40,
+                            left: 20,
                             child: TextButton(
                               onPressed: () {
                                 Navigator.push(
@@ -89,18 +88,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               ), // Display name
                             ),
                           ),
-                          Positioned(
-                            top: 90,
-                            left: 20,
-                            child: Container(
-                              width: 350,
-                              alignment: Alignment.center,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: Text('Search'),
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   top: 90,
+                          //   left: 20,
+                          //   child: Container(
+                          //     width: 350,
+                          //     alignment: Alignment.center,
+                          //     child: TextButton(
+                          //       onPressed: () {},
+                          //       child: Text('Search'),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

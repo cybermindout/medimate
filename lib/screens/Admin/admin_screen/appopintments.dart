@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -63,6 +65,8 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                   Text("${data.gender}"),
                                   Text("Email : ${data.email}"),
                                   Text("Mob:${data.mobile}"),
+                                  Text('Hospital: ${data.hospital}'),
+                                  Text('Doctor: ${data.doctor}'),
                                   Text('Address: ${data.address}'),
                                 ],
                               ),
@@ -82,7 +86,10 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                   onPressed: () {
                                     _launchDialer(data.mobile);
                                   },
-                                  icon: Icon(Icons.call),
+                                  icon: Icon(
+                                    Icons.call,
+                                    color: Colors.green,
+                                  ),
                                 ),
                                 // Delete button
                                 IconButton(

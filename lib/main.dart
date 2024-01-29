@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:medimate/screens/Admin/admin_screen/dashboard/dashboard_screen.dart';
 import 'package:medimate/screens/Admin/model/appoinment_model.dart';
 import 'package:medimate/screens/Admin/model/doctor_model.dart';
 import 'package:medimate/screens/Admin/model/hospital_model.dart';
@@ -11,7 +10,7 @@ import 'package:medimate/screens/Admin/model/special_model.dart';
 import 'package:medimate/screens/Guest/guest_screen/splash_screen.dart';
 import 'package:medimate/screens/Guest/model/user_model.dart';
 import 'package:medimate/screens/User/model/wishlist_model.dart';
-import 'package:medimate/screens/User/user_screen/home_screen.dart';
+
 
 const SAVE_KEY_NAME = "UserLoggedIn";
 Future<void> main() async {
@@ -62,7 +61,7 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }

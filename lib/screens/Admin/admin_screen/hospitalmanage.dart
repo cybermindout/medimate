@@ -310,6 +310,7 @@ class _HospitalPageState extends State<HospitalManagePage> {
                         addHospitalButton();
                         _hospitalController.clear();
                         reload();
+
                         Navigator.pop(context);
                       },
                       child: Text("Add"),

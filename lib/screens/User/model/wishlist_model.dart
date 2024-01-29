@@ -9,7 +9,7 @@ class WishlistModel extends HiveObject {
   int? doctorId;
 
   @HiveField(1)
-  DoctorModel? doctorDetails; // Field to store the DoctorModel
+  DoctorModel? doctorDetails;
 
   WishlistModel({
     required this.doctorId,

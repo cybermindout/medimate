@@ -1,5 +1,6 @@
 import 'package:medimate/screens/Admin/model/doctor_model.dart';
 import 'package:medimate/screens/Admin/model/hospital_model.dart';
+import 'package:medimate/screens/Admin/model/special_model.dart';
 
 class FilterFunctions {
   List<HospitalModel> filterHospitalsByLocation(
@@ -11,25 +12,21 @@ class FilterFunctions {
         .toList();
   }
 
-  static List<DoctorModel> filterSpecializationsByHospital(
-    List<DoctorModel> allSpecializations,
-    String selectedHospital,
+  List<HospitalModel> filterSpecializationsByHospital(
+    List<HospitalModel> allSpecializations,
+    String selectedSpecialization,
   ) {
     return allSpecializations
-        .where((specialization) =>
-            specialization.specialization == selectedHospital)
+        .where((hospital) => hospital.specialization == selectedSpecialization)
         .toList();
   }
 
-  static List<DoctorModel> filterDoctorsByHospitalAndSpecialization(
+  List<DoctorModel> filterDoctorsByHospital(
     List<DoctorModel> allDoctors,
     String selectedHospital,
-    String selectedSpecialization,
   ) {
     return allDoctors
-        .where((doctor) =>
-            doctor.hospital == selectedHospital &&
-            doctor.specialization == selectedSpecialization)
+        .where((doctor) => doctor.hospital == selectedHospital)
         .toList();
   }
 }
