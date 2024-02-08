@@ -51,240 +51,246 @@ class _MyWidgetState extends State<SignUp> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Center(
-                        child: Align(
-                      alignment: Alignment.center,
-                      child: Text('Join Us',
+              child: Center(
+                child: SizedBox(
+                  width: 500,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Center(
+                            child: Align(
+                          alignment: Alignment.center,
+                          child: Text('Join Us',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w500,
+                                height: 0,
+                                letterSpacing: -0.30,
+                              )),
+                        )),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'You can search Doctors, and make \n appointments',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF677294),
+                          fontSize: 14,
+                          fontFamily: 'Rubik',
+                          fontWeight: FontWeight.w400,
+                          height: 1.5,
+                          letterSpacing: -0.30,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        validator: validateFullName,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          hintText: "Full Name",
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      //date of birth
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "select date of birth";
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _dobController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Date Of Birth"),
+                        readOnly: true,
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      //gender selection
+                      DropdownButtonFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "select a gender";
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        value: selectedGender,
+                        items: genderOptions.map((String gender) {
+                          return DropdownMenuItem<String>(
+                              value: gender, child: Text(gender));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedGender = newValue!;
+                          });
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Gender"),
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DropdownButtonFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "select a blood group";
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        value: selectedBloodGroup,
+                        items: bloodGroup.map((String bloodgroup) {
+                          return DropdownMenuItem<String>(
+                              value: bloodgroup, child: Text(bloodgroup));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedBloodGroup = newValue!;
+                          });
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Blood Group"),
+                      ),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      //email
+                      TextFormField(
+                        validator: validateEmail,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Email"),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //phone
+                      TextFormField(
+                        validator: validatePhone,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        keyboardType: TextInputType.phone,
+                        controller: _phoneController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Phone"),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //password
+                      TextFormField(
+                        validator: validatePassword,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        obscureText: true,
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Password"),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      //confirm password
+                      TextFormField(
+                        validator: validatecpassword,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        obscureText: true,
+                        controller: _cpasswordController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            hintText: "Confirm Password"),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+
+                      //login button
+                      SizedBox(
+                        width: 295,
+                        height: 54,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            userCheck(_emailController.text);
+                          },
+                          child: Text(
+                            "SignUp",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: 'Rubik'),
+                          ),
+                          style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10))),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Color(0xFF0EBE7F))),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (ctx1) => LoginScreen(),
+                          ));
+                        },
+                        child: Text(
+                          '''Have an account? Log in''',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
+                            color: Color(0xFF0EBE7F),
+                            fontSize: 14,
                             fontFamily: 'Rubik',
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w400,
                             height: 0,
                             letterSpacing: -0.30,
-                          )),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'You can search Doctors, and make \n appointments',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF677294),
-                      fontSize: 14,
-                      fontFamily: 'Rubik',
-                      fontWeight: FontWeight.w400,
-                      height: 1.5,
-                      letterSpacing: -0.30,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    validator: validateFullName,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      hintText: "Full Name",
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  //date of birth
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "select date of birth";
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _dobController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Date Of Birth"),
-                    readOnly: true,
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                  ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  //gender selection
-                  DropdownButtonFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "select a gender";
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    value: selectedGender,
-                    items: genderOptions.map((String gender) {
-                      return DropdownMenuItem<String>(
-                          value: gender, child: Text(gender));
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedGender = newValue!;
-                      });
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Gender"),
-                  ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-                  DropdownButtonFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "select a blood group";
-                      }
-                      return null;
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    value: selectedBloodGroup,
-                    items: bloodGroup.map((String bloodgroup) {
-                      return DropdownMenuItem<String>(
-                          value: bloodgroup, child: Text(bloodgroup));
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedBloodGroup = newValue!;
-                      });
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Blood Group"),
-                  ),
-
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  //email
-                  TextFormField(
-                    validator: validateEmail,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Email"),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  //phone
-                  TextFormField(
-                    validator: validatePhone,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    keyboardType: TextInputType.phone,
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Phone"),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  //password
-                  TextFormField(
-                    validator: validatePassword,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Password"),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  //confirm password
-                  TextFormField(
-                    validator: validatecpassword,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    obscureText: true,
-                    controller: _cpasswordController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintText: "Confirm Password"),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  //login button
-                  SizedBox(
-                    width: 295,
-                    height: 54,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        userCheck(_emailController.text);
-                      },
-                      child: Text(
-                        "SignUp",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Rubik'),
+                          ),
+                        ),
                       ),
-                      style: ButtonStyle(
-                          shape: MaterialStatePropertyAll(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          backgroundColor:
-                              MaterialStatePropertyAll(Color(0xFF0EBE7F))),
-                    ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (ctx1) => LoginScreen(),
-                      ));
-                    },
-                    child: Text(
-                      '''Have an account? Log in''',
-                      style: TextStyle(
-                        color: Color(0xFF0EBE7F),
-                        fontSize: 14,
-                        fontFamily: 'Rubik',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                        letterSpacing: -0.30,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
