@@ -59,9 +59,9 @@ Future<void> editDoctor(
     String updatedGender,
     String updatedDOB,
     String updatedExperience,
-    updatedConsultingstarttime,
-    updatedConsultingendtime,
-    List<String> updatedConsultingdays,
+    // updatedConsultingstarttime,
+    // updatedConsultingendtime,
+    // List<String> updatedConsultingdays,
     String updatedHospital,
     String updatedSpec) async {
   final specBox = await Hive.openBox<DoctorModel>('doctor_db');
@@ -74,9 +74,9 @@ Future<void> editDoctor(
     existingDoctor.name = updatedName;
     existingDoctor.gender = updatedGender;
     existingDoctor.experience = updatedExperience;
-    existingDoctor.consultingStartTime = updatedConsultingstarttime;
-    existingDoctor.consultingEndTime = updatedConsultingendtime;
-    existingDoctor.consultingdays = updatedConsultingdays;
+    // existingDoctor.consultingStartTime = updatedConsultingstarttime;
+    // existingDoctor.consultingEndTime = updatedConsultingendtime;
+    // existingDoctor.consultingdays = updatedConsultingdays;
     existingDoctor.hospital = updatedHospital;
     existingDoctor.dob = updatedDOB;
     existingDoctor.specialization = updatedSpec;

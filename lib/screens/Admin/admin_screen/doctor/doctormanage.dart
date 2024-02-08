@@ -93,248 +93,257 @@ class _AddDoctorState extends State<AddDoctor> {
               children: [
                 Form(
                   key: _formKey,
-                  child: Column(
-                    children: [
-                      // add photo
-                      Row(
+                  child: Center(
+                    child: SizedBox(
+                      width: 500,
+                      child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Container(
-                              height: 150,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                  color: const Color.fromARGB(255, 18, 18, 18),
+                          // add photo
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  height: 150,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 2,
+                                      color:
+                                          const Color.fromARGB(255, 18, 18, 18),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: _selectedImage != null
+                                      ? Image.file(
+                                          _selectedImage!,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Center(child: Icon(Icons.add_a_photo)),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
                               ),
-                              child: _selectedImage != null
-                                  ? Image.file(
-                                      _selectedImage!,
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Center(child: Icon(Icons.add_a_photo)),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      _pickImage();
+                                    },
+                                    icon: Icon(Icons.photo_library_outlined),
+                                    tooltip: "select from gallery",
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _photoImage();
+                                    },
+                                    icon: Icon(Icons.camera_alt_outlined),
+                                    tooltip: "open camera",
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // full name
+                          TextFormField(
+                            controller: _nameController,
+                            validator: validateFullName,
+                            decoration: InputDecoration(
+                              hintText: "Full Name",
                             ),
                           ),
-                          Column(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  _pickImage();
-                                },
-                                icon: Icon(Icons.photo_library_outlined),
-                                tooltip: "select from gallery",
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  _photoImage();
-                                },
-                                icon: Icon(Icons.camera_alt_outlined),
-                                tooltip: "open camera",
-                              ),
-                            ],
-                          )
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // gender selection
+                          DropdownButtonFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "select a gender";
+                              }
+                              return null;
+                            },
+                            value: selectedGender,
+                            items: genderOptions.map((String gender) {
+                              return DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(gender),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedGender = newValue!;
+                              });
+                            },
+                            decoration: InputDecoration(hintText: "Gender"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // experience
+                          TextFormField(
+                            controller: _experienceController,
+                            validator: validateExperience,
+                            decoration: InputDecoration(hintText: 'Experience'),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // consulting days checkboxes
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: consultingDaysMap.keys.map((day) {
+                                return Row(
+                                  children: [
+                                    Checkbox(
+                                      value: consultingDaysMap[day],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          consultingDaysMap[day] =
+                                              value ?? false;
+                                        });
+                                      },
+                                    ),
+                                    Text(day),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // consulting start time field
+                          TextFormField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                              text: consultingStartTime != null
+                                  ? consultingStartTime!.format(context)
+                                  : 'Start Time',
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Consulting Start Time",
+                            ),
+                            onTap: () {
+                              _selectConsultingStartTime(context);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          // consulting end time field
+                          TextFormField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                              text: consultingEndTime != null
+                                  ? consultingEndTime!.format(context)
+                                  : 'End Time',
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Consulting End Time",
+                            ),
+                            onTap: () {
+                              _selectConsultingEndTime(context);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          //date of birth
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "select date of birth";
+                              }
+                              return null;
+                            },
+                            controller: _dobController,
+                            decoration:
+                                InputDecoration(hintText: "Date Of Birth"),
+                            readOnly: true,
+                            onTap: () {
+                              _selectDob(context);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          //select hospital
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null) {
+                                return "select Hospital";
+                              }
+                              return null;
+                            },
+                            value: selectedHospitalName,
+                            items: hospitals.map((HospitalModel hospitals) {
+                              return DropdownMenuItem<String>(
+                                value: hospitals.hos,
+                                child: Text(hospitals.hos),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedHospitalName = newValue;
+                              });
+                            },
+                            decoration: InputDecoration(hintText: "Hospital"),
+                          ),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          //specialization selection
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null) {
+                                return "select Specialization";
+                              }
+                              return null;
+                            },
+                            value: selectedSpecializationName,
+                            items: specializations
+                                .map((SpecialModel specialization) {
+                              return DropdownMenuItem<String>(
+                                value: specialization.spec,
+                                child: Text(specialization.spec),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedSpecializationName = newValue;
+                              });
+                            },
+                            decoration:
+                                InputDecoration(hintText: "Specialization"),
+                          ),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          //submit button
+                          ElevatedButton(
+                            onPressed: () {
+                              submit();
+                            },
+                            child: Text("ADD DOCTOR"),
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // full name
-                      TextFormField(
-                        controller: _nameController,
-                        validator: validateFullName,
-                        decoration: InputDecoration(
-                          hintText: "Full Name",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // gender selection
-                      DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "select a gender";
-                          }
-                          return null;
-                        },
-                        value: selectedGender,
-                        items: genderOptions.map((String gender) {
-                          return DropdownMenuItem<String>(
-                            value: gender,
-                            child: Text(gender),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedGender = newValue!;
-                          });
-                        },
-                        decoration: InputDecoration(hintText: "Gender"),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // experience
-                      TextFormField(
-                        controller: _experienceController,
-                        validator: validateExperience,
-                        decoration: InputDecoration(hintText: 'Experience'),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // consulting days checkboxes
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: consultingDaysMap.keys.map((day) {
-                            return Row(
-                              children: [
-                                Checkbox(
-                                  value: consultingDaysMap[day],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      consultingDaysMap[day] = value ?? false;
-                                    });
-                                  },
-                                ),
-                                Text(day),
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // consulting start time field
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: consultingStartTime != null
-                              ? consultingStartTime!.format(context)
-                              : 'Start Time',
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Consulting Start Time",
-                        ),
-                        onTap: () {
-                          _selectConsultingStartTime(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      // consulting end time field
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: consultingEndTime != null
-                              ? consultingEndTime!.format(context)
-                              : 'End Time',
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Consulting End Time",
-                        ),
-                        onTap: () {
-                          _selectConsultingEndTime(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      //date of birth
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "select date of birth";
-                          }
-                          return null;
-                        },
-                        controller: _dobController,
-                        decoration: InputDecoration(hintText: "Date Of Birth"),
-                        readOnly: true,
-                        onTap: () {
-                          _selectDob(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      //select hospital
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null) {
-                            return "select Hospital";
-                          }
-                          return null;
-                        },
-                        value: selectedHospitalName,
-                        items: hospitals.map((HospitalModel hospitals) {
-                          return DropdownMenuItem<String>(
-                            value: hospitals.hos,
-                            child: Text(hospitals.hos),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedHospitalName = newValue;
-                          });
-                        },
-                        decoration: InputDecoration(hintText: "Hospital"),
-                      ),
-
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      //specialization selection
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null) {
-                            return "select Specialization";
-                          }
-                          return null;
-                        },
-                        value: selectedSpecializationName,
-                        items:
-                            specializations.map((SpecialModel specialization) {
-                          return DropdownMenuItem<String>(
-                            value: specialization.spec,
-                            child: Text(specialization.spec),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedSpecializationName = newValue;
-                          });
-                        },
-                        decoration: InputDecoration(hintText: "Specialization"),
-                      ),
-
-                      SizedBox(
-                        height: 20,
-                      ),
-
-                      //submit button
-                      ElevatedButton(
-                        onPressed: () {
-                          submit();
-                        },
-                        child: Text("ADD DOCTOR"),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],

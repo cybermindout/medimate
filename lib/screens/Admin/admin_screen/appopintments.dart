@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:medimate/screens/Admin/db/appointment_functions.dart';
 import 'package:medimate/screens/Admin/model/appoinment_model.dart';
@@ -16,28 +15,87 @@ class AppointmentViewPage extends StatefulWidget {
 }
 
 class _AppointmentViewPageState extends State<AppointmentViewPage> {
+  DateTime? selectedDateTime;
+
+  Future<void> _showDeleteConfirmationDialog(int id) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Appointment"),
+          content: Text("Are you sure you want to delete this appointment?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                deleteAppointment(id);
+                Navigator.pop(context);
+              },
+              child: Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     getAppointment();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "APPOINTMENTS",
-          style: appBarTitleStyle(),
+    return Container(
+      decoration: backBoxDecoration(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            "APPOINTMENTS",
+            style: appBarTitleStyle(),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 700,
-              child: ValueListenableBuilder(
-                valueListenable: appointmentListNotifier,
-                builder: (BuildContext ctx,
-                    List<AppointmentModel> appointmentList, Widget? child) {
-                  return ListView.separated(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Date filter buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _selectDate(context);
+                    },
+                    child: Text("Filter by Date"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _clearDateFilter();
+                    },
+                    child: Text("View All Dates"),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                height: 700,
+                child: ValueListenableBuilder(
+                  valueListenable: appointmentListNotifier,
+                  builder: (BuildContext ctx,
+                      List<AppointmentModel> appointmentList, Widget? child) {
+                    // Filter appointments based on selectedDateTime
+                    List<AppointmentModel> filteredList = appointmentList
+                        .where((appointment) =>
+                            selectedDateTime == null ||
+                            appointment.date.isAfter(selectedDateTime!))
+                        .toList();
+
+                    return ListView.separated(
                       itemBuilder: ((context, index) {
-                        final data = appointmentList[index];
+                        final data = filteredList[index];
 
                         return Container(
                           child: ListTile(
@@ -50,7 +108,7 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    DateFormat('dd-MM-yyyy HH:mm')
+                                    DateFormat('EEE dd-MM-yyyy h:mm a')
                                         .format(data.date),
                                     style: TextStyle(
                                       color: Colors.grey,
@@ -62,12 +120,14 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w700),
                                   ),
-                                  Text("${data.gender}"),
+                                  Text("Gender:${data.gender}"),
                                   Text("Email : ${data.email}"),
                                   Text("Mob:${data.mobile}"),
-                                  Text('Hospital: ${data.hospital}'),
-                                  Text('Doctor: ${data.doctor}'),
                                   Text('Address: ${data.address}'),
+                                  Text('Location: ${data.location}'),
+                                  Text('Hosital: ${data.hospital}'),
+                                  Text('Doctor: ${data.doctor}'),
+                                  Text('Date: ${data.booktime}'),
                                 ],
                               ),
                             ),
@@ -91,13 +151,16 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                     color: Colors.green,
                                   ),
                                 ),
+
                                 // Delete button
                                 IconButton(
                                   onPressed: () {
-                                    // Perform the delete action
-                                    // deleteTelemedicine(data.id!);
+                                    _showDeleteConfirmationDialog(data.id!);
                                   },
-                                  icon: Icon(Icons.delete),
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ],
                             ),
@@ -107,11 +170,13 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                       separatorBuilder: ((context, index) {
                         return const Divider();
                       }),
-                      itemCount: appointmentList.length);
-                },
+                      itemCount: filteredList.length,
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -125,5 +190,28 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
     } else {
       SnackBar(content: Text("couldn't launch dialer"));
     }
+  }
+
+  // Date filter function
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDateTime) {
+      setState(() {
+        selectedDateTime = pickedDate;
+      });
+    }
+  }
+
+  // Clear date filter function
+  void _clearDateFilter() {
+    setState(() {
+      selectedDateTime = null;
+    });
   }
 }

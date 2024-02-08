@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:medimate/screens/Admin/db/hospital_function.dart';
-import 'package:medimate/screens/Admin/model/hospital_model.dart'; 
+import 'package:medimate/screens/Admin/model/hospital_model.dart';
 
 class HospitalSearchDelegate extends SearchDelegate<HospitalModel> {
   @override
@@ -48,6 +50,12 @@ class HospitalSearchDelegate extends SearchDelegate<HospitalModel> {
                   hospital.hos.toLowerCase().contains(query.toLowerCase()),
             )
             .toList();
+
+    if (filteredHospitals.isEmpty) {
+      return Center(
+        child: Text('No matching hospitals found.'),
+      );
+    }
 
     return ListView.separated(
       itemBuilder: (context, index) {

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:medimate/screens/Admin/model/appoinment_model.dart';
 import 'package:medimate/screens/Admin/model/doctor_model.dart';
+import 'package:medimate/screens/Admin/model/feedback_model.dart';
 import 'package:medimate/screens/Admin/model/hospital_model.dart';
 import 'package:medimate/screens/Admin/model/location_model.dart';
 import 'package:medimate/screens/Admin/model/special_model.dart';
 import 'package:medimate/screens/Guest/guest_screen/splash_screen.dart';
 import 'package:medimate/screens/Guest/model/user_model.dart';
 import 'package:medimate/screens/User/model/wishlist_model.dart';
-
 
 const SAVE_KEY_NAME = "UserLoggedIn";
 Future<void> main() async {
@@ -24,6 +24,7 @@ Future<void> main() async {
   Hive.openBox<DoctorModel>('doctor_db');
   Hive.openBox<WishlistModel>('wish_db');
   Hive.openBox<AppointmentModel>('appo_db');
+  Hive.openBox<FeedBackModel>('feed_db');
 
   if (!Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
     Hive.registerAdapter(UserModelAdapter());
@@ -46,6 +47,9 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(AppointmentModelAdapter().typeId)) {
     Hive.registerAdapter(AppointmentModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(FeedBackModelAdapter().typeId)) {
+    Hive.registerAdapter(FeedBackModelAdapter());
+  }
   runApp(const MyApp());
 }
 
@@ -56,6 +60,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MediMate',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 255, 255)),

@@ -51,6 +51,12 @@ class DoctorSearchDelegate extends SearchDelegate<DoctorModel> {
             )
             .toList();
 
+    if (filteredDoctors.isEmpty) {
+      return Center(
+        child: Text('No matching Doctors found.'),
+      );
+    }
+
     return ListView.separated(
       itemBuilder: (context, index) {
         final data = filteredDoctors[index];

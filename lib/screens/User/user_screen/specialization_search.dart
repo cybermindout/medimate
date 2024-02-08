@@ -53,6 +53,12 @@ class SpecializationSearchDelegate extends SearchDelegate<SpecialModel> {
                 (spec) => spec.spec.toLowerCase().contains(query.toLowerCase()))
             .toList();
 
+    if (filteredSpecialization.isEmpty) {
+      return Center(
+        child: Text('No matching Specialization found.'),
+      );
+    }
+
     return ListView.separated(
       itemBuilder: (context, index) {
         final data = filteredSpecialization[index];

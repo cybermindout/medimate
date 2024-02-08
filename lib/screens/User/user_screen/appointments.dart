@@ -9,7 +9,7 @@ import 'package:medimate/screens/Admin/model/hospital_model.dart';
 import 'package:medimate/screens/Admin/model/location_model.dart';
 import 'package:medimate/screens/Admin/model/special_model.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
-import 'package:medimate/screens/User/db/appointment_functions.dart';
+import 'package:medimate/screens/User/db/userappointment_functions.dart';
 import 'package:medimate/screens/User/user_screen/home_screen.dart';
 import 'package:medimate/screens/User/db/filter_function.dart';
 
@@ -38,6 +38,13 @@ class _BookAppointmentState extends State<BookAppointment> {
     getHospitals();
     getSpecializations();
     getDoctors();
+
+    if (currentUser != null) {
+      _nameController.text = currentUser!.fullname;
+      _dobController.text = currentUser!.dob;
+      _emailController.text = currentUser!.email;
+      _mobileController.text = currentUser!.phone;
+    }
   }
 
   void onLocationChanged(String? newValue) {
@@ -65,304 +72,322 @@ class _BookAppointmentState extends State<BookAppointment> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            "BOOK APPOINTMENTS",
+            "BOOK APPOINTMENT",
             style: appBarTitleStyle(),
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a title";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.title),
-                        ),
-                        hint: Text("Title"),
-                        value: selectedDescription,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDescription = newValue;
-                          });
-                        },
-                        items: description.map((String title) {
-                          return DropdownMenuItem<String>(
-                            value: title,
-                            child: Text(title),
-                          );
-                        }).toList(),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: _nameController,
-                        validator: validateFullName,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.abc),
-                          hintText: "Full Name",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a gender";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: selectedGender,
-                        items: genderOptions.map((String gender) {
-                          return DropdownMenuItem<String>(
-                              value: gender, child: Text(gender));
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedGender = newValue!;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.arrow_right_rounded,
-                              color: Colors.grey,
+          child: Center(
+            child: SizedBox(
+              width: 500,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a title";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.title),
                             ),
-                            hintText: "Gender"),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select date of birth";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: _dobController,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.calendar_month,
-                              color: Colors.grey,
+                            hint: Text("Title"),
+                            value: selectedDescription,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDescription = newValue;
+                              });
+                            },
+                            items: description.map((String title) {
+                              return DropdownMenuItem<String>(
+                                value: title,
+                                child: Text(title),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _nameController,
+                            validator: validateFullName,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.abc),
+                              hintText: "Full Name",
                             ),
-                            hintText: "Date Of Birth"),
-                        readOnly: true,
-                        onTap: () {
-                          selectDate(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: validateEmail,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.email,
-                              color: Colors.grey,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DropdownButtonFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a gender";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            value: selectedGender,
+                            items: genderOptions.map((String gender) {
+                              return DropdownMenuItem<String>(
+                                  value: gender, child: Text(gender));
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedGender = newValue!;
+                              });
+                            },
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.arrow_right_rounded,
+                                  color: Colors.grey,
+                                ),
+                                hintText: "Gender"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select date of birth";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _dobController,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.calendar_month,
+                                  color: Colors.grey,
+                                ),
+                                hintText: "Date Of Birth"),
+                            readOnly: true,
+                            onTap: () {
+                              selectDate(context);
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: validateEmail,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Colors.grey,
+                                ),
+                                hintText: "Email"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: validateNumber,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _mobileController,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.call,
+                                  color: Colors.grey,
+                                ),
+                                hintText: "Mobile"),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            controller: _addressController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: validateEmpty,
+                            decoration: InputDecoration(
+                              hintText: "Address",
+                              prefixIcon: Icon(
+                                Icons.home,
+                                color: Colors.grey,
+                              ),
                             ),
-                            hintText: "Email"),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: validateNumber,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _mobileController,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.call,
-                              color: Colors.grey,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a date";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _dateController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.calendar_today,
+                                color: Colors.grey,
+                              ),
+                              hintText: "Booking Date",
                             ),
-                            hintText: "Mobile"),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: _addressController,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: validateEmpty,
-                        decoration: InputDecoration(
-                          hintText: "Address",
-                          prefixIcon: Icon(
-                            Icons.home,
-                            color: Colors.grey,
+                            onTap: () {
+                              selectBookDate(context);
+                            },
                           ),
-                        ),
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a date";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: _dateController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Colors.grey,
+                          SizedBox(
+                            height: 20,
                           ),
-                          hintText: "Booking Date",
-                        ),
-                        onTap: () {
-                          selectBookDate(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a time";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: _timeController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.access_time,
-                            color: Colors.grey,
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a time";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _timeController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.access_time,
+                                color: Colors.grey,
+                              ),
+                              hintText: "Time",
+                            ),
+                            readOnly: true,
+                            onTap: () {
+                              selectTime(context);
+                            },
                           ),
-                          hintText: "Time",
-                        ),
-                        readOnly: true,
-                        onTap: () {
-                          selectTime(context);
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a location";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: selectedLocation,
-                        onChanged: onLocationChanged,
-                        items: locationList.map((LocationModel location) {
-                          return DropdownMenuItem<String>(
-                            value: location.loc,
-                            child: Text(location.loc),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.location_on,
-                            color: Colors.grey,
+                          SizedBox(
+                            height: 20,
                           ),
-                          hintText: "Select Location",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a hospital";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: selectedHospital,
-                        onChanged: onHospitalChanged,
-                        items: filteredHospitals.map((HospitalModel hospital) {
-                          return DropdownMenuItem<String>(
-                            value: hospital.hos,
-                            child: Text(hospital.hos),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.local_hospital,
-                            color: Colors.grey,
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a location";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            value: selectedLocation,
+                            onChanged: onLocationChanged,
+                            items: locationList.map((LocationModel location) {
+                              return DropdownMenuItem<String>(
+                                value: location.loc,
+                                child: Text(location.loc),
+                              );
+                            }).toList(),
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.location_on,
+                                color: Colors.grey,
+                              ),
+                              hintText: "Select Location",
+                            ),
                           ),
-                          hintText: "Select Hospital",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Select a doctor";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        value: selectedDoctor,
-                        items: filteredDoctors.map((DoctorModel doctor) {
-                          return DropdownMenuItem<String>(
-                            value: doctor.name,
-                            child: Text(
-                                "${doctor.name} (${doctor.specialization})"),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDoctor = newValue;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: Colors.grey,
+                          SizedBox(
+                            height: 20,
                           ),
-                          hintText: "Select Doctor",
-                        ),
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a hospital";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            value: selectedHospital,
+                            onChanged: onHospitalChanged,
+                            items:
+                                filteredHospitals.map((HospitalModel hospital) {
+                              return DropdownMenuItem<String>(
+                                value: hospital.hos,
+                                child: Text(hospital.hos),
+                              );
+                            }).toList(),
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.local_hospital,
+                                color: Colors.grey,
+                              ),
+                              hintText: "Select Hospital",
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DropdownButtonFormField<String>(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Select a doctor";
+                              }
+                              return null;
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            value: selectedDoctor,
+                            items: filteredDoctors.map((DoctorModel doctor) {
+                              return DropdownMenuItem<String>(
+                                value: doctor.name,
+                                child: Text(
+                                    "${doctor.name} (${doctor.specialization})"),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDoctor = newValue;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: Colors.grey,
+                              ),
+                              hintText: "Select Doctor",
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              addAppointmentButton();
+                            },
+                            child: Text("Submit"),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          addAppointmentButton();
-                        },
-                        child: Text("Submit"),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -405,6 +430,10 @@ class _BookAppointmentState extends State<BookAppointment> {
     final String email = _emailController.text.trim();
     final String mobile = _mobileController.text.trim();
     final String address = _addressController.text.trim();
+    final String location = selectedLocation ?? "";
+    final String hospital = selectedHospital ?? "";
+    final String doctor = selectedDoctor ?? "";
+    final String booktime = _dateController.text.trim();
     final DateTime date = DateTime.now();
     final String user = currentUser!.fullname;
 
@@ -419,12 +448,12 @@ class _BookAppointmentState extends State<BookAppointment> {
           address: address,
           date: date,
           user: user,
-          description: '',
-          location: '',
-          hospital: '',
+          description: description,
+          location: location,
+          hospital: hospital,
           special: '',
-          doctor: '',
-          booktime: '');
+          doctor: doctor,
+          booktime: booktime);
       addAppointment(appointment);
       showSnackBarSuccess(context, 'We will contact you soon');
       Navigator.pushAndRemoveUntil(

@@ -50,6 +50,12 @@ Future<int> appointmentStats() async {
   return appointmentCount;
 }
 
+Future<void> deleteAppointment(int id) async {
+  final appoDB = await Hive.openBox<AppointmentModel>('appo_db');
+  await appoDB.delete(id);
+  getAppointment();
+}
+
 //to get appointment of specific user
 Future<void> getUserAppointment(String userName) async {
   final appointmentDB = await Hive.openBox<AppointmentModel>('appointment_db');

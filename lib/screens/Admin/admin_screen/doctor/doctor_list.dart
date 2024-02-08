@@ -181,10 +181,9 @@ class _DoctorListPageState extends State<DoctorListPage> {
                                           data.name,
                                           data.gender,
                                           data.experience,
-                                          data.consultingStartTime
-                                              as TimeOfDay?,
-                                          data.consultingEndTime as TimeOfDay?,
-                                          data.consultingdays,
+                                          // data.consultingStartTime as TimeOfDay?,
+                                          // data.consultingEndTime as TimeOfDay?,
+                                          // data.consultingdays,
                                           data.hospital,
                                           data.dob,
                                           data.specialization,
@@ -224,9 +223,9 @@ class _DoctorListPageState extends State<DoctorListPage> {
     String name,
     String gender,
     String experience,
-    TimeOfDay? consultingStartTime,
-    TimeOfDay? consultingEndTime,
-    List<String> consultingdays,
+    // TimeOfDay? consultingStartTime,
+    // TimeOfDay? consultingEndTime,
+    // List<String> consultingdays,
     String hosp,
     String dob,
     String spec,
@@ -235,9 +234,9 @@ class _DoctorListPageState extends State<DoctorListPage> {
     _nameController.text = name;
     selectedGender = gender;
     _experienceController.text = experience;
-    _consultingdaysController.text = consultingdays.join(', ');
-    _consultingstarttimeController.text = consultingStartTime as String;
-    _consultingendtimeController.text = consultingEndTime as String;
+    // _consultingdaysController.text = consultingdays.join(', ');
+    // _consultingstarttimeController.text = consultingStartTime.toString();
+    // _consultingendtimeController.text = consultingEndTime.toString();
     selectedHospitalName = hosp;
     if (specialization.any((s) => s.spec == spec)) {
       selectedSpecializationsName = spec;
@@ -349,64 +348,64 @@ class _DoctorListPageState extends State<DoctorListPage> {
                         height: 20,
                       ),
                       // consulting days checkboxes
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: consultingDaysMap.keys.map((day) {
-                            return Row(
-                              children: [
-                                Checkbox(
-                                  value: consultingDaysMap[day],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      consultingDaysMap[day] = value ?? false;
-                                    });
-                                  },
-                                ),
-                                Text(day),
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   child: Row(
+                      //     children: consultingDaysMap.keys.map((day) {
+                      //       return Row(
+                      //         children: [
+                      //           Checkbox(
+                      //             value: consultingDaysMap[day],
+                      //             onChanged: (value) {
+                      //               setState(() {
+                      //                 consultingDaysMap[day] = value ?? false;
+                      //               });
+                      //             },
+                      //           ),
+                      //           Text(day),
+                      //         ],
+                      //       );
+                      //     }).toList(),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
 
                       // consulting start time field
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: consultingStartTime != null
-                              ? consultingStartTime.format(context)
-                              : 'Start Time',
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Consulting Start Time",
-                        ),
-                        onTap: () {
-                          _selectConsultingStartTime(context);
-                        },
-                      ),
+                      // TextFormField(
+                      //   readOnly: true,
+                      //   controller: TextEditingController(
+                      //     text: consultingStartTime != null
+                      //         ? consultingStartTime.format(context)
+                      //         : 'Start Time',
+                      //   ),
+                      //   decoration: InputDecoration(
+                      //     hintText: "Consulting Start Time",
+                      //   ),
+                      //   onTap: () {
+                      //     _selectConsultingStartTime(context);
+                      //   },
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
 
                       // consulting end time field
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: consultingEndTime != null
-                              ? consultingEndTime.format(context)
-                              : 'End Time',
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Consulting End Time",
-                        ),
-                        onTap: () {
-                          _selectConsultingEndTime(context);
-                        },
-                      ),
+                      // TextFormField(
+                      //   readOnly: true,
+                      //   controller: TextEditingController(
+                      //     text: consultingEndTime != null
+                      //         ? consultingEndTime.format(context)
+                      //         : 'End Time',
+                      //   ),
+                      //   decoration: InputDecoration(
+                      //     hintText: "Consulting End Time",
+                      //   ),
+                      //   onTap: () {
+                      //     _selectConsultingEndTime(context);
+                      //   },
+                      // ),
                       SizedBox(
                         height: 20,
                       ),
@@ -490,11 +489,11 @@ class _DoctorListPageState extends State<DoctorListPage> {
                             _nameController.text,
                             selectedGender!,
                             _experienceController.text,
-                            _consultingstarttimeController.text,
-                            _consultingendtimeController.text,
-                            _consultingdaysController.text.split(', ')
-                                as String,
-                            selectedHospitalName as List<String>,
+                            // _consultingstarttimeController.text,
+                            // _consultingendtimeController.text,
+                            // _consultingdaysController.text.split(', ')
+                            //    as List<String>,
+                            selectedHospitalName as String,
                             _dobController.text,
                             selectedSpecializationsName as String,
                           );

@@ -65,5 +65,5 @@ class AppointmentModel extends HiveObject {
       required this.special,
       required this.doctor,
       required this.booktime,
-      this.id});
+      this.id, String? specialization});
 }

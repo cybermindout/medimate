@@ -39,6 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            toolbarHeight: 100,
+          ),
           body: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -72,30 +76,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 30),
-                TextFormField(
-                  controller: _emailController,
-                  validator: validateEmail,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                SizedBox(
+                  width: 500,
+                  child: TextFormField(
+                    controller: _emailController,
+                    validator: validateEmail,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      hintText: "example@gmail.com",
                     ),
-                    hintText: "example@gmail.com",
                   ),
                 ),
                 SizedBox(height: 15),
-                TextFormField(
-                  controller: _passwordController,
-                  validator: validatePassword,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.key),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                SizedBox(
+                  width: 500,
+                  child: TextFormField(
+                    controller: _passwordController,
+                    validator: validatePassword,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.key),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      hintText: "password",
                     ),
-                    hintText: "password",
                   ),
                 ),
                 SizedBox(height: 30),

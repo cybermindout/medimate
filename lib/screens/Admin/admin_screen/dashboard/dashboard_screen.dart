@@ -5,6 +5,7 @@ import 'package:medimate/screens/Admin/admin_screen/appopintments.dart';
 import 'package:medimate/screens/Admin/admin_screen/dashboard/dashboad_widgets.dart';
 import 'package:medimate/screens/Admin/admin_screen/doctor/doctor_list.dart';
 import 'package:medimate/screens/Admin/admin_screen/doctor/doctormanage.dart';
+import 'package:medimate/screens/Admin/admin_screen/feedbackview.dart';
 import 'package:medimate/screens/Admin/admin_screen/hospitalmanage.dart';
 import 'package:medimate/screens/Admin/admin_screen/locationmanage.dart';
 import 'package:medimate/screens/Admin/admin_screen/specialmanage_screen.dart';
@@ -65,131 +66,153 @@ class DashboardScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Row(
+                      child: Center(
+                        child: Container(
+                          child: SizedBox(
+                            width: 500,
+                            child: Column(
                               children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(
-                                  width: 15,
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    CustomDashItem(
+                                      icon: Icons.local_hospital,
+                                      label: 'Hospital',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HospitalManagePage(),
+                                            ));
+                                      },
+                                    ),
+                                    CustomDashItem(
+                                      icon: Icons.star_border_outlined,
+                                      label: 'Specialization',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SpecialPage(),
+                                            ));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    CustomDashItem(
+                                      icon: Icons.group_add_outlined,
+                                      label: 'Add Doctor',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => AddDoctor(),
+                                            ));
+                                      },
+                                    ),
+                                    CustomDashItem(
+                                      icon: Icons.group_outlined,
+                                      label: 'Doctor List',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DoctorListPage(),
+                                            ));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    CustomDashItem(
+                                      icon: Icons.bar_chart,
+                                      label: 'Statitics',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StatisticsPage(),
+                                            ));
+                                      },
+                                    ),
+                                    CustomDashItem(
+                                      icon: Icons.bookmark_add,
+                                      label: 'Appointments',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AppointmentViewPage(),
+                                            ));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    CustomDashItem(
+                                      icon: Icons.location_on,
+                                      label: 'Location',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LocationManagePage(),
+                                            ));
+                                      },
+                                    ),
+                                    CustomDashItem(
+                                      icon: Icons.feedback_outlined,
+                                      label: 'Feed Back',
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FeedbackViewPage(),
+                                            ));
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CustomDashItem(
-                                  icon: Icons.local_hospital,
-                                  label: 'Hospital',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              HospitalManagePage(),
-                                        ));
-                                  },
-                                ),
-                                CustomDashItem(
-                                  icon: Icons.star_border_outlined,
-                                  label: 'Specialization',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SpecialPage(),
-                                        ));
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CustomDashItem(
-                                  icon: Icons.group_add_outlined,
-                                  label: 'Add Doctor',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AddDoctor(),
-                                        ));
-                                  },
-                                ),
-                                CustomDashItem(
-                                  icon: Icons.group_outlined,
-                                  label: 'Doctor List',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              DoctorListPage(),
-                                        ));
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CustomDashItem(
-                                  icon: Icons.bar_chart,
-                                  label: 'Hospital',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              StatisticsPage(),
-                                        ));
-                                  },
-                                ),
-                                CustomDashItem(
-                                  icon: Icons.bookmark_add,
-                                  label: 'Appointments',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AppointmentViewPage(),
-                                        ));
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                CustomDashItem(
-                                  icon: Icons.location_on,
-                                  label: 'Location',
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              LocationManagePage(),
-                                        ));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),

@@ -136,76 +136,82 @@ class _SpecialPageState extends State<SpecialPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // add photo
-                Row(
+        return Center(
+          child: SizedBox(
+            width: 500,
+            child: Dialog(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        height: 150,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: const Color.fromARGB(255, 18, 18, 18),
+                    // add photo
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: const Color.fromARGB(255, 18, 18, 18),
+                              ),
+                            ),
+                            child: _selectedImage != null
+                                ? Image.file(
+                                    _selectedImage!,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Center(child: Icon(Icons.add_a_photo)),
                           ),
                         ),
-                        child: _selectedImage != null
-                            ? Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.fill,
-                              )
-                            : Center(child: Icon(Icons.add_a_photo)),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _pickImage();
-                          },
-                          icon: Icon(Icons.photo_library_outlined),
-                          tooltip: "select from gallery",
-                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                _pickImage();
+                              },
+                              icon: Icon(Icons.photo_library_outlined),
+                              tooltip: "select from gallery",
+                            ),
+                          ],
+                        )
                       ],
-                    )
+                    ),
+                    SizedBox(height: 20),
+
+                    // special txt
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'cannot be empty';
+                        }
+                        if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                          return 'Only characters are allowed';
+                        }
+                        return null;
+                      },
+                      controller: _specialController,
+                      decoration:
+                          InputDecoration(hintText: "Enter specialization"),
+                    ),
+                    SizedBox(height: 20),
+
+                    // button
+                    ElevatedButton(
+                      onPressed: () {
+                        addSpecialButton();
+                        _specialController.clear();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Add"),
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
-                SizedBox(height: 20),
-
-                // special txt
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'cannot be empty';
-                    }
-                    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                      return 'Only characters are allowed';
-                    }
-                    return null;
-                  },
-                  controller: _specialController,
-                  decoration: InputDecoration(hintText: "Enter specialization"),
-                ),
-                SizedBox(height: 20),
-
-                // button
-                ElevatedButton(
-                  onPressed: () {
-                    addSpecialButton();
-                    _specialController.clear();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Add"),
-                ),
-                SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         );

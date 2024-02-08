@@ -7,25 +7,25 @@ class UserModel {
   int? id;
 
   @HiveField(1)
-  final String fullname;
+  String fullname;
 
   @HiveField(2)
-  final String dob;
+  String dob;
 
   @HiveField(3)
-  final String gender;
+  String gender;
 
   @HiveField(4)
-  final String bloodGroup;
+  String bloodGroup;
 
   @HiveField(5)
-  final String email;
+  String email;
 
   @HiveField(6)
-  final String phone;
+  String phone;
 
   @HiveField(7)
-  final String password;
+  String password;
 
   UserModel(
       {required this.fullname,

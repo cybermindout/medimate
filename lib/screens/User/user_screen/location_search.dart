@@ -49,6 +49,12 @@ class LocationSearchDelegate extends SearchDelegate<LocationModel> {
             )
             .toList();
 
+    if (filteredlocations.isEmpty) {
+      return Center(
+        child: Text('No matching locations found.'),
+      );
+    }
+
     return ListView.separated(
       itemBuilder: (context, index) {
         final data = filteredlocations[index];

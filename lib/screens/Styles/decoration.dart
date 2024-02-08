@@ -101,3 +101,7 @@ BoxDecoration statsContainer() => BoxDecoration(
             color: Color.fromARGB(255, 92, 92, 92).withOpacity(.5),
           )
         ]);
+
+TextStyle ProfileTextStyle() => TextStyle(fontWeight: FontWeight.w600);
+
+TextStyle listtileTitleStyle() => GoogleFonts.rubik();

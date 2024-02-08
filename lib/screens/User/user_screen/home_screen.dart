@@ -9,7 +9,9 @@ import 'package:medimate/screens/User/user_screen/appointments.dart';
 import 'package:medimate/screens/User/user_screen/doctor_screen.dart';
 import 'package:medimate/screens/User/user_screen/hospital_screen.dart';
 import 'package:medimate/screens/User/user_screen/location_screen.dart';
+import 'package:medimate/screens/User/user_screen/myappointments.dart';
 import 'package:medimate/screens/User/user_screen/profile_screen.dart';
+import 'package:medimate/screens/User/user_screen/setttings_page.dart';
 import 'package:medimate/screens/User/user_screen/specialization_screen.dart';
 import 'package:medimate/screens/User/user_screen/wish_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,391 +46,413 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(0.0),
-        decoration: backBoxDecoration(),
-        child: SafeArea(
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: SingleChildScrollView(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      child: Stack(
-                        children: <Widget>[
-                          AppBar(
-                            title: Text(''),
-                            backgroundColor: Color.fromRGBO(46, 208, 151, 1),
-                            toolbarHeight: 150,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(30),
+    return SizedBox(
+      width: 10,
+      child: Container(
+          padding: EdgeInsets.all(0.0),
+          decoration: backBoxDecoration(),
+          child: SafeArea(
+              child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: SingleChildScrollView(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                        child: Stack(
+                          children: <Widget>[
+                            AppBar(
+                              title: Text(''),
+                              backgroundColor: Color.fromRGBO(46, 208, 151, 1),
+                              toolbarHeight: 150,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(30),
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: 40,
-                            left: 20,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfilePage(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'Hi ${currentUser?.fullname ?? ""}',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
-                                    fontFamily: 'Rubik'),
-                              ), // Display name
+                            Positioned(
+                              top: 40,
+                              left: 20,
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePage(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Hi ${currentUser?.fullname ?? ""}',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                      fontFamily: 'Rubik'),
+                                ), // Display name
+                              ),
                             ),
-                          ),
-                          // Positioned(
-                          //   top: 90,
-                          //   left: 20,
-                          //   child: Container(
-                          //     width: 350,
-                          //     alignment: Alignment.center,
-                          //     child: TextButton(
-                          //       onPressed: () {},
-                          //       child: Text('Search'),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: CarouselSlider(
-                          options: CarouselOptions(
-                            height: 200,
-                            viewportFraction: 0.95,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16 / 9,
-                            enableInfiniteScroll: true,
-                            autoPlay: true,
-                            autoPlayInterval: Duration(seconds: 3),
-                            autoPlayAnimationDuration:
-                                Duration(milliseconds: 1000),
-                            autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
-                            enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          ),
-                          items: [
-                            Container(
-                              child: Center(
-                                  child: Image.asset(
-                                'assets/images/banner1.jpg',
-                                fit: BoxFit.fill,
-                              )),
-                            ),
-                            Container(
-                              child: Center(
-                                  child:
-                                      Image.asset('assets/images/banner1.jpg')),
-                            ),
-                            Container(
-                              child: Center(
-                                  child:
-                                      Image.asset('assets/images/banner1.jpg')),
-                            ),
-                          ]),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 15,
+                            Positioned(
+                              top: 40,
+                              left: 190,
+                              child: Container(
+                                width: 350,
+                                alignment: Alignment.center,
+                                child: IconButton(
+                                  icon:
+                                      Icon(Icons.settings, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SettingsPage(),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Book
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 50,
-                                    width: 330,
-                                    decoration: menuBoxDecoration(),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LocationPage(),
-                                                    ));
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.location_on,
-                                                    size: 30,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(" Locations",
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white),
-                                                      textAlign:
-                                                          TextAlign.center),
-                                                ],
-                                              ))
-                                        ]),
-                                  ),
-                                ]),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Hospital
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 150,
-                                    width: 150,
-                                    decoration: menuBoxDecoration(),
-                                    child: Column(children: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HospitalPage(),
-                                              ),
-                                            );
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons.local_hospital_outlined,
-                                                size: 100,
-                                                color: Colors.white,
-                                              ),
-                                              Text(" Hospitals",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  textAlign: TextAlign.center),
-                                            ],
-                                          ))
-                                    ]),
-                                  ),
-                                  //Speacialization
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 150,
-                                    width: 150,
-                                    decoration: menuBoxDecoration(),
-                                    child: Column(children: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SpecializationPage(),
-                                                ));
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons.star_border,
-                                                size: 100,
-                                                color: Colors.white,
-                                              ),
-                                              Text(" Specialization",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  textAlign: TextAlign.center),
-                                            ],
-                                          ))
-                                    ]),
-                                  ),
-                                ]),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Doctors
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 150,
-                                    width: 150,
-                                    decoration: menuBoxDecoration(),
-                                    child: Column(children: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DoctorPage(),
-                                              ),
-                                            );
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons.groups_outlined,
-                                                size: 100,
-                                                color: Colors.white,
-                                              ),
-                                              Text(" Doctors",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  textAlign: TextAlign.center),
-                                            ],
-                                          ))
-                                    ]),
-                                  ),
-                                  //Appointments
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 150,
-                                    width: 150,
-                                    decoration: menuBoxDecoration(),
-                                    child: Column(children: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      BookAppointment()),
-                                            );
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .collections_bookmark_rounded,
-                                                size: 100,
-                                                color: Colors.white,
-                                              ),
-                                              Text(" Appointments",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  textAlign: TextAlign.center),
-                                            ],
-                                          ))
-                                    ]),
-                                  ),
-                                ]),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Doctors
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 150,
-                                    width: 150,
-                                    decoration: menuBoxDecoration(),
-                                    child: Column(children: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WishlistPage()),
-                                            );
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(
-                                                Icons.favorite,
-                                                size: 100,
-                                                color: Colors.white,
-                                              ),
-                                              Text(" WishList",
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  textAlign: TextAlign.center),
-                                            ],
-                                          ))
-                                    ]),
-                                  ),
-                                ]),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  //Book
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 50,
-                                    width: 330,
-                                    decoration: menuBoxDecoration(),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          TextButton(
-                                              onPressed: () {
-                                                logOut(context);
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.logout_outlined,
-                                                    size: 30,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(" LogOut",
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white),
-                                                      textAlign:
-                                                          TextAlign.center),
-                                                ],
-                                              ))
-                                        ]),
-                                  ),
-                                ]),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                )))));
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: CarouselSlider(
+                            options: CarouselOptions(
+                              height: 200,
+                              viewportFraction: 0.95,
+                              enlargeCenterPage: true,
+                              aspectRatio: 16 / 9,
+                              enableInfiniteScroll: true,
+                              autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 3),
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 1000),
+                              autoPlayCurve: Curves.fastEaseInToSlowEaseOut,
+                              enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            ),
+                            items: [
+                              Container(
+                                child: Center(
+                                    child: Image.asset(
+                                  'assets/images/banner1.jpg',
+                                  fit: BoxFit.fill,
+                                )),
+                              ),
+                              Container(
+                                child: Center(
+                                    child: Image.asset(
+                                        'assets/images/Designer.png')),
+                              ),
+                              Container(
+                                child: Center(
+                                    child: Image.asset(
+                                        'assets/images/banner1.jpg')),
+                              ),
+                            ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Container(
+                            child: SizedBox(
+                              width: 400,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        //Book
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 50,
+                                          width: 330,
+                                          decoration: menuBoxDecoration(),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                LocationPage(),
+                                                          ));
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.location_on,
+                                                          size: 30,
+                                                          color: Colors.white,
+                                                        ),
+                                                        Text(" Locations",
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .white),
+                                                            textAlign: TextAlign
+                                                                .center),
+                                                      ],
+                                                    ))
+                                              ]),
+                                        ),
+                                      ]),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        //Hospital
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HospitalPage(),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .local_hospital_outlined,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" Hospitals",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                        //Speacialization
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            SpecializationPage(),
+                                                      ));
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.star_border,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" Specialization",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                      ]),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        //Doctors
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DoctorPage(),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.groups_outlined,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" Doctors",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                        //Appointments
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            BookAppointment()),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .collections_bookmark_outlined,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" Appointments",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                      ]),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        //Doctors
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WishlistPage()),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.favorite,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" WishList",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 150,
+                                          width: 150,
+                                          decoration: menuBoxDecoration(),
+                                          child: Column(children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MyAppointments()),
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.book_outlined,
+                                                      size: 100,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(" My Bookings",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ],
+                                                ))
+                                          ]),
+                                        ),
+                                      ]),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))))),
+    );
   }
 }

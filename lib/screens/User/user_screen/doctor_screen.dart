@@ -27,6 +27,7 @@ class _DoctorPageState extends State<DoctorPage> {
   void initState() {
     super.initState();
     getDoctor();
+    
   }
 
   @override
@@ -99,6 +100,8 @@ class _DoctorPageState extends State<DoctorPage> {
                             return ListView.separated(
                               itemBuilder: (context, index) {
                                 final data = doctorList[index];
+                                bool isAddedToWishlist =
+                                    isDoctorInWishlist(data);
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -163,21 +166,30 @@ class _DoctorPageState extends State<DoctorPage> {
                                         ],
                                       ),
                                       trailing: IconButton(
-                                        icon: Icon(
-                                          Icons.favorite_outline_outlined,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          addToWishlist(data);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  WishlistPage(),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                          icon: Icon(
+                                            isAddedToWishlist
+                                                ? Icons.favorite
+                                                : Icons
+                                                    .favorite_outline_outlined,
+                                            color: isAddedToWishlist
+                                                ? Colors.red
+                                                : Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            if (isAddedToWishlist) {
+                                              removeFromWishlist(data);
+                                            } else {
+                                              addToWishlist(data);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      WishlistPage(),
+                                                ),
+                                              );
+                                            }
+                                            setState(() {});
+                                          }),
                                     ),
                                   ),
                                 );
@@ -200,20 +212,39 @@ class _DoctorPageState extends State<DoctorPage> {
     );
   }
 
-  void addToWishlist(DoctorModel doctor) async {
-  try {
-    var wishlistBox = await Hive.openBox<WishlistModel>('wishlist');
-
-    var wishlistItem = WishlistModel(
-      doctorId: doctor.id,
-      doctorDetails: doctor,
-    );
-
-    wishlistBox.put(doctor.id, wishlistItem);
-
-    print('Doctor added to wishlist: ${doctor.id}');
-  } catch (e) {
-    print('Error adding doctor to wishlist: $e');
+  bool isDoctorInWishlist(DoctorModel doctor) {
+    // Check if the doctor is in the wishlist
+    var wishlistBox = Hive.box<WishlistModel>('wishlist');
+    return wishlistBox.containsKey(doctor.id);
   }
-}
+
+  void addToWishlist(DoctorModel doctor) async {
+    try {
+      var wishlistBox = await Hive.openBox<WishlistModel>('wishlist');
+
+      var wishlistItem = WishlistModel(
+        doctorId: doctor.id,
+        doctorDetails: doctor,
+      );
+
+      wishlistBox.put(doctor.id, wishlistItem);
+
+      print('Doctor added to wishlist: ${doctor.id}');
+    } catch (e) {
+      print('Error adding doctor to wishlist: $e');
+    }
+  }
+
+  void removeFromWishlist(DoctorModel doctor) async {
+    try {
+      var wishlistBox = await Hive.openBox<WishlistModel>('wishlist');
+
+      // Remove the doctor from the wishlist
+      wishlistBox.delete(doctor.id);
+
+      print('Doctor removed from wishlist: ${doctor.id}');
+    } catch (e) {
+      print('Error removing doctor from wishlist: $e');
+    }
+  }
 }

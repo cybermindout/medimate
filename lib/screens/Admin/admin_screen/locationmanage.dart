@@ -38,7 +38,7 @@ class _LocationManagePageState extends State<LocationManagePage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
@@ -46,7 +46,7 @@ class _LocationManagePageState extends State<LocationManagePage> {
               onPressed: () {
                 deleteLocation(id);
                 getLocations();
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: Text("Delete"),
             ),
@@ -140,39 +140,44 @@ class _LocationManagePageState extends State<LocationManagePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // location txt
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'cannot be empty';
-                    }
-                    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
-                      return 'Only characters are allowed';
-                    }
-                    return null;
-                  },
-                  controller: _locationController,
-                  decoration: InputDecoration(hintText: "Enter location"),
+        return Center(
+          child: SizedBox(
+            width: 500,
+            child: Dialog(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // location txt
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'cannot be empty';
+                        }
+                        if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+                          return 'Only characters are allowed';
+                        }
+                        return null;
+                      },
+                      controller: _locationController,
+                      decoration: InputDecoration(hintText: "Enter location"),
+                    ),
+                    SizedBox(height: 20),
+            
+                    // button
+                    ElevatedButton(
+                      onPressed: () {
+                        addLocationButton();
+                        _locationController.clear();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Add"),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
-                SizedBox(height: 20),
-
-                // button
-                ElevatedButton(
-                  onPressed: () {
-                    addLocationButton();
-                    _locationController.clear();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Add"),
-                ),
-                SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         );
@@ -186,35 +191,40 @@ class _LocationManagePageState extends State<LocationManagePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // location txt
-                TextFormField(
-                  controller: _editController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: "Edit Location",
-                  ),
-                ),
-                SizedBox(height: 25),
+        return Center(
+          child: SizedBox(
+            width: 500,
+            child: Dialog(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // location txt
+                    TextFormField(
+                      controller: _editController,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: "Edit Location",
+                      ),
+                    ),
+                    SizedBox(height: 25),
 
-                ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Colors.green[400])),
-                  onPressed: () {
-                    editLocation(id, _editController.text, location);
-                    _locationController.clear();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Save"),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.green[400])),
+                      onPressed: () {
+                        editLocation(id, _editController.text, location);
+                        _locationController.clear();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Save"),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
-                SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         );
