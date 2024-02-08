@@ -13,7 +13,6 @@ import 'package:medimate/screens/Admin/db/location_function.dart';
 import 'package:medimate/screens/Admin/db/special_function.dart';
 import 'package:medimate/screens/Guest/db/user_function.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
-import 'package:medimate/screens/User/db/userappointment_functions.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});

@@ -23,12 +23,12 @@ class _DoctorListPageState extends State<DoctorListPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  final TextEditingController _consultingdaysController =
-      TextEditingController();
-  final TextEditingController _consultingstarttimeController =
-      TextEditingController();
-  final TextEditingController _consultingendtimeController =
-      TextEditingController();
+  // final TextEditingController _consultingdaysController =
+  //     TextEditingController();
+  // final TextEditingController _consultingstarttimeController =
+  //     TextEditingController();
+  // final TextEditingController _consultingendtimeController =
+  //     TextEditingController();
   String? selectedGender;
   final List<String> genderOptions = ['Male', 'Female', 'Not Specified'];
   Map<String, bool> consultingDaysMap = {

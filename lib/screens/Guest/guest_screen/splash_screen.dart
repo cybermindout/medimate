@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:medimate/screens/Admin/admin_screen/dashboard/dashboard_screen.dart';
 import 'package:medimate/screens/Guest/guest_screen/login_screen.dart';
 import 'package:medimate/screens/User/user_screen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
