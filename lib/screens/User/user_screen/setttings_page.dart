@@ -6,6 +6,7 @@ import 'package:medimate/main.dart';
 import 'package:medimate/screens/Guest/guest_screen/login_screen.dart';
 import 'package:medimate/screens/Guest/model/user_model.dart';
 import 'package:medimate/screens/Styles/decoration.dart';
+import 'package:medimate/screens/User/user_screen/abou_page.dart';
 import 'package:medimate/screens/User/user_screen/feedback.dart';
 import 'package:medimate/screens/User/user_screen/help_center.dart';
 import 'package:medimate/screens/User/user_screen/profile_screen.dart';
@@ -114,6 +115,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => FeedbackPage(),
+                      ));
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.question_mark_rounded),
+                title: Text(
+                  "About",
+                  style: listtileTitleStyle(),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AboutPage(),
                       ));
                 },
               ),

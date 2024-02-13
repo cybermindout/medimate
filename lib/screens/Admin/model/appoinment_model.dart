@@ -1,4 +1,3 @@
-
 import 'package:hive/hive.dart';
 
 part 'appoinment_model.g.dart';
@@ -65,5 +64,6 @@ class AppointmentModel extends HiveObject {
       required this.special,
       required this.doctor,
       required this.booktime,
-      this.id, String? specialization});
+      this.id,
+      String? specialization});
 }

@@ -206,7 +206,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                             validator: validateNumber,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.phone,
                             controller: _mobileController,
                             decoration: InputDecoration(
                                 prefixIcon: Icon(
@@ -493,9 +493,9 @@ class _BookAppointmentState extends State<BookAppointment> {
 
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime(2024),
-      firstDate: DateTime(1900), // Start date for selection
-      lastDate: DateTime(2025), // End date for selection
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(Duration(days: 0)),
+      lastDate: DateTime(2100), // End date for selection
     );
 
     if (picked != null && picked != selectedBookDate) {

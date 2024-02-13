@@ -108,7 +108,7 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    DateFormat('EEE dd-MM-yyyy h:mm a')
+                                    DateFormat('dd-EEE-yyyy h:mm a')
                                         .format(data.date),
                                     style: TextStyle(
                                       color: Colors.grey,
@@ -127,7 +127,7 @@ class _AppointmentViewPageState extends State<AppointmentViewPage> {
                                   Text('Location: ${data.location}'),
                                   Text('Hosital: ${data.hospital}'),
                                   Text('Doctor: ${data.doctor}'),
-                                  Text('Date: ${data.booktime}'),
+                                  Text('Book date: ${data.booktime}'),
                                 ],
                               ),
                             ),

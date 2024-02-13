@@ -1,4 +1,4 @@
-package com.example.medimate
+package com.application.medimate
 
 import io.flutter.embedding.android.FlutterActivity
 

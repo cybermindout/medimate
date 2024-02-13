@@ -53,17 +53,6 @@ Future<void> getUser() async {
   currentUser = userBox.values.firstWhere(
     (user) => user.email == userEmail,
   );
-  calculateAge();
-}
-
-void calculateAge() {
-  if (currentUser != null) {
-    String dobString = currentUser!.dob;
-    DateTime dob = DateTime.parse(dobString);
-    DateTime currentDate = DateTime.now();
-    Duration difference = currentDate.difference(dob);
-    age = (difference.inDays / 365).floor();
-  }
 }
 
 //to validate full name
@@ -158,5 +147,3 @@ void showSnackBarFailed(BuildContext context, String message) {
     ),
   );
 }
-
-
