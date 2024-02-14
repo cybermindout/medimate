@@ -32,7 +32,7 @@ class DashboardScreen extends StatelessWidget {
                       child: Stack(
                         children: <Widget>[
                           AppBar(
-                            title: Text(''),
+                            title: Text('dashboard'),
                             backgroundColor: Color.fromRGBO(46, 208, 151, 1),
                             toolbarHeight: 100,
                             shape: RoundedRectangleBorder(
